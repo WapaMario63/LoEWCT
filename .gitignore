@@ -1,2 +1,4 @@
 # Paths
-LoEWCT/LuaSrc/*
+LoEWCT/LuaSrc/*.h
+LoEWCT/LuaSrc/*.c
+LoEWCT/LuaSrc/*.hpp
