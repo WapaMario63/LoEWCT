@@ -17,7 +17,10 @@ SOURCES += main.cpp\
     loewct.cpp \
     player.cpp \
     datatype.cpp \
-    serialize.cpp
+    serialize.cpp \
+    maps.cpp \
+    quest.cpp \
+    message.cpp
 
 HEADERS  += mainwindow.h \
     loewct.h \
@@ -25,7 +28,10 @@ HEADERS  += mainwindow.h \
     datatype.h \
     serialize.h \
     statsComponent.h \
-    sceneEntity.h
+    sceneEntity.h \
+    maps.h \
+    quest.h \
+    message.h
 
 FORMS    += mainwindow.ui
 

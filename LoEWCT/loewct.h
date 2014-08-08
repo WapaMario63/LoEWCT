@@ -5,6 +5,7 @@
 
 #include "mainwindow.h"
 #include "player.h"
+#include "maps.h"
 
 /// THE CORE OF [LoEWCT] \\\
 class LoEWCT : public QMainWindow
@@ -39,7 +40,7 @@ public:
 
     QMap<uint32_t, uint32_t> wearablePositionsMap; // Maps Item IDs to their wearable positions.
 
-    //QList<Scene> scenes; // List of scenes from the vortex DB
+    QList<Scene> scenes; // List of scenes from the vortex DB
     QMutex lastIdMutex; // Protects lastId and lastNetviewId
 
     //QList<Mobzone*> mobzones;
@@ -55,5 +56,8 @@ private:
     //Sync sync
     bool* usedIds;
 };
+
+extern MainWindow win;
+extern LoEWCT loe;
 
 #endif // LOEWCT_H

@@ -64,7 +64,7 @@ public:
     QList<InventoryItem> inv; // Pony's Inventory
     QList<WearableItem> worn; // Pony's Worn items
     quint32 nBits; // Number of Bits (currency)
-    QList<Quest> quests; // State of the pony's quests
+    //QList<Quest> quests; // State of the pony's quests
     quint32 lastQuest; // Last QuestScript+ the player ran.
     quint32 wornSlots; // Flag of the used item-wearing slots (See enum WearablePositions at dataType.h)
     Player* owner;
