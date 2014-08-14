@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>851</width>
-    <height>545</height>
+    <width>850</width>
+    <height>558</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,18 +19,191 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>581</width>
-      <height>471</height>
+      <width>571</width>
+      <height>481</height>
      </rect>
     </property>
     <property name="currentIndex">
      <number>0</number>
     </property>
+    <widget class="QWidget" name="serverStatusTab">
+     <attribute name="title">
+      <string notr="true">Server Controls</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>541</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Status Overview</string>
+      </property>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;b&gt;Log In Server Status:&lt;/b&gt;</string>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="logInServStatus">
+       <property name="geometry">
+        <rect>
+         <x>450</x>
+         <y>20</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Lucida Sans</family>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;OFFLINE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Game Server Status:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="gameServStatus">
+       <property name="geometry">
+        <rect>
+         <x>450</x>
+         <y>40</y>
+         <width>71</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Lucida Sans</family>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;OFFLINE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Players Online:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>541</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Controls</string>
+      </property>
+      <widget class="QPushButton" name="restartGameServStatusBtn">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>20</y>
+         <width>141</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Restart Game Server</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="gameServStatusBtn">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>20</y>
+         <width>221</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Star Game Server</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="logInServStatusBtn">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>141</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Start Log In Server</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
     <widget class="QWidget" name="serverConsoleTab">
      <attribute name="title">
       <string>Server Console</string>
      </attribute>
-     <widget class="QPlainTextEdit" name="plainTextEdit">
+     <widget class="QPlainTextEdit" name="consoleLog">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -103,11 +276,16 @@
         </disabled>
        </palette>
       </property>
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+       </font>
+      </property>
       <property name="plainText">
-       <string/>
+       <string>Still not yet fully done</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="cmdLine">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -117,7 +295,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="sendBtn">
       <property name="geometry">
        <rect>
         <x>464</x>
@@ -142,13 +320,41 @@
      </attribute>
     </widget>
    </widget>
+   <widget class="QTabWidget" name="tabWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>10</y>
+      <width>251</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Player List</string>
+     </attribute>
+     <widget class="QListWidget" name="listWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>221</width>
+        <height>441</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>851</width>
+     <width>850</width>
      <height>21</height>
     </rect>
    </property>
@@ -161,15 +367,25 @@
     <property name="title">
      <string>Settings</string>
     </property>
+    <addaction name="actionServer_Settings"/>
+    <addaction name="actionPlugins"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionNPC_Creator"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp_2">
+    <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout_LoEWCT"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuHelp_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="movable">
@@ -185,12 +401,49 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionAbout_LoEWCT">
+   <property name="text">
+    <string>About [LoEWCT]</string>
+   </property>
+  </action>
+  <action name="actionNPC_Creator">
+   <property name="text">
+    <string>NPC Creator</string>
+   </property>
+  </action>
+  <action name="actionServer_Settings">
+   <property name="text">
+    <string>Server Settings</string>
+   </property>
+  </action>
+  <action name="actionPlugins">
+   <property name="text">
+    <string>Plugins</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>cmdLine</sender>
+   <signal>returnPressed()</signal>
+   <receiver>sendBtn</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>233</x>
+     <y>494</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>495</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
