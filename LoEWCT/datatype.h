@@ -26,7 +26,7 @@ class UQuaternion
 {
 public:
     UQuaternion();
-    UQuaternion(float ux, float uy, float uz, float, uw);
+    UQuaternion(float ux, float uy, float uz, float uw);
 
 public:
     float x;

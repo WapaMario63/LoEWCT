@@ -21,7 +21,10 @@ SOURCES += main.cpp\
     maps.cpp \
     quest.cpp \
     message.cpp \
-    settings.cpp
+    settings.cpp \
+    mob.cpp \
+    mobparser.cpp \
+    pony.cpp
 
 HEADERS  += mainwindow.h \
     loewct.h \
@@ -33,7 +36,11 @@ HEADERS  += mainwindow.h \
     maps.h \
     quest.h \
     message.h \
-    settings.h
+    settings.h \
+    mob.h \
+    mobzone.h \
+    mobparser.h \
+    pony.h
 
 FORMS    += mainwindow.ui
 

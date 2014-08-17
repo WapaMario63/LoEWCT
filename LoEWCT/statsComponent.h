@@ -18,4 +18,16 @@ public:
     //float energy;
 };
 
+// Mob Stats
+
+/**
+  This part contains default stats for the Mobs
+  Arrays are indexed by the enum MobType
+**/
+
+#include "mob.h"
+
+extern unsigned defaultMaxHealth[];
+extern float defaultDefense[];
+
 #endif // STATSCOMPONENT_H

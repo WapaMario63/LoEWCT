@@ -22,7 +22,7 @@ UQuaternion::UQuaternion()
     w=0;
 }
 
-UQuaternion::UQuaternion(float ux, float uy, float uz, float, uw)
+UQuaternion::UQuaternion(float ux, float uy, float uz, float uw)
 {
     x=ux;
     x=uy;

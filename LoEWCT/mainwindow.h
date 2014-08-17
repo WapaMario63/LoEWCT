@@ -22,16 +22,6 @@
 
 #include "loewct.h"
 
-// Define paths and files that are used frequently
-#define GAMEDATAPATH "data/data/"
-#define PLAYERSPATH "data/players/"
-#define NETDATAPATH "data/netdata/"
-#define CONFIGPATH "data/server.ini"
-#define SERVERLISTPATH "data/serversList.cfg"
-#define MOBZONESPATH "data/mobZones/"
-
-
-
 namespace Ui { class MainWindow; }
 
 class MainWindow : public QMainWindow
@@ -50,7 +40,8 @@ public:
 
     void logMessage(QString msg);
     void logStatus(QString msg);
-    void starServer();
+    void chatBoxHandler();
+    void startServer(); // Only calls LoEWCT's class to set it to true
     void stopServer(); // Only calls LoEWCT's class to set it to true
 
 public:

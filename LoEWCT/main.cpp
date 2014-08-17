@@ -5,6 +5,7 @@
 #include <QDir>
 
 #include "LuaSrc/lua.hpp"
+#include "loewct.h"
 
 int argc=0;
 
