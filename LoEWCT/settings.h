@@ -3,62 +3,88 @@
 
 #include <QString>
 
-// Global Settings, these are the things you configure for the server.
+// Log Prefixes
+#define LOG_INFO "[INFO]"
+#define LOG_ERROR "[ERROR]"
+#define LOG_SEVERE "[SEVERE]"
 
-// Choose which build you want to compile for.
-/// BABSCON = For the January 24-26th Ohaycon and April 18-20th BABScon builds.
-/// BRONYCON = For the August 8-10th Build
-#define BABSCON_BUILD false
-#define BRONYCON_BUILD true
+#define LOG_PLUGIN "[PLUGIN]"
 
-// Default sync interval, you may change if needed.
-#define DEFAULT_SYNC_INTERVAL 250
+// Default settings
+#define DEFAULT_MAX_CONNECTED 256
+#define DEFAULT_LOG_INFOSMESSAGES true
+#define DEFAULT_SALT_PASSWORD "Change Me"
 
-// Server Version String
-#define LOEWCT_VERSION "v1.0"
+#define DEFAULT_ENABLE_LOGIN_SERVER true
+#define DEFAULT_LOGIN_PORT 1034
+#define DEFAULT_MAX_REGISTERED 4096
+#define DEFAULT_USE_REMOTE_LOGIN false
+#define DEFAULT_REMOTE_LOGIN_IP "127.0.0.1"
+#define DEFAULT_REMOTE_LOGIN_PORT 1034
+#define DEFAULT_REMOTE_LOGIN_TIMEOUT 5000
+#define DEFAULT_ENABLE_GETLOG true
+#define DEFAULT_SESSKEY_VALIDATION true
 
-// Server Console Log type
-#define LOG_INFO "[INFO] "
-#define LOG_SEVERE "[SEVERE] "
-#define LOG_ERROR "[ERROR] "
-#define LOG_CHAT "[CHAT] " // Only moderation related logs that are done in the in-game chat
-#define LOG_QUEST "[QUESTSCRIPT] " // for QuestScript related things only
-#define LOG_MOBS "[MOBSCRIPT] " // For mobscript related things only
+#define DEFAULT_ENABLE_GAME_SERVER true
+#define DEFAULT_GAME_PORT 1039
+#define DEFAULT_ENABLE_MULTIPLAYER true
+#define DEFAULT_SYNC_INTERVAL 200
+#define DEFAULT_PING_TIMEOUT 25
+#define DEFAULT_PING_CHECK 3000
+#define DEFAULT_PVP false
 
-// Main Config
+#define MAX_PACKET_DUPS 1000
+
+// Use either BABSCon/Ohaycon clients or BronyCon (August 8-10) Client
+#define USE_BABSCON_CLIENT true
+#define USE_BRONYCON_CLIENT false
+
+
+
 namespace Settings
 {
-    extern int loginPort; // Server Port for Log In Server
-    extern int gamePort; // Server Port for the game server
+    // Server Settings
+    extern int loginPort; // Port for the login server
+    extern int gamePort; // Port for the game server
     extern QString remoteLoginIP; // IP of the remote login server
     extern int remoteLoginPort; // Port of the remote login server
-    extern int remoteLoginTimeout; // Time before giving up connecting to the remote login server
-    extern bool useRemoteLogin; // If we want to use the remote login server or not
-    extern int maxRegisteredPlayers; // Maximum number of registered players in the database, can den registration
-    extern int pingTimeout; // Maximum time between reception of pings, can disconnect player.
+    extern int remoteLoginTimeout; // Time before we give up connecting to the remote login server
+    extern bool useRemoteLogin; // Whether or not to use the remote login server
+    extern int maxConnected; // Max number of players connected at the same time, can deny login
+    extern int maxRegistered; // Max number of registered players in database, can deny registration
+    extern int pingTimeout; // Max time between recdption of pings, can disconnect player
     extern int pingCheckInterval; // Time between ping timeout checks
-    extern bool logInfo; // Disables/Enables logMessage, but doesn't affect logStatusMessage (Who is going to use this anyway?)
-    extern QString saltPassword; // Used to check passwords between login and game servers, must be the same on al lthe servers involved.
+    extern bool logInfos; // Can disable logMessage, but doesn't affect logStatusMessage
+    extern QString saltPassword; // Used to check passwords between login and game servers, must be the same on all the servers involved
     extern bool enableSessKeyValidation; // Enable Session Key Validation
-    extern bool enableLoginServer; // Starts the logIn server.
-    extern bool enablePlayeSync; // Sync players' positions.
-    extern bool enableGETLog; // Enabe [GET] /log requests
-    extern bool enableGameServer; // Starts the Game Server
-    extern int maxPlayersConnected; // Maximum number of players connected at the same time, can deny login
+    extern bool enableLoginServer; // Starts a login server
+    extern bool enableGameServer; // Starts a game server
+    extern bool enableMultiplayer; // Sync players' positions
+    extern bool enableGetlog; // Enable GET /log requests
 
-    extern QString motdMsg;
-    extern QString rulesMsg;
-    extern QString helpMessage;
-    extern QString serverPrefix;
-    extern bool mapTpEnable; // Will be gone once moderation system is implemented
+    // [LoEWCT] Settings
+    extern bool pvp; // Enables player versus player fights
+
+    extern bool mapTpEnable;
+    extern bool playerJoingMsg;
     extern int rollCoolDown;
-    extern bool pvp; // Enables Player Vs. Player Combat
+    extern QString motdMessage;
+    extern QString rulesMessage;
+    extern QString serverPrefix;
+    extern QString helpMessage;
+    extern quint16 maxPacketDups;
+    extern bool lmmPlayer;
+    extern int anheroTime;
+    extern bool useReliableAnimation;
+
 }
 
-namespace PlayerSettings
+namespace PlayerData
 {
-    extern bool isMod;
+
+    extern bool isModerator;
     extern QString banReason;
+
 }
 
 #endif // SETTINGS_H

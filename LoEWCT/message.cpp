@@ -1,124 +1,186 @@
-#include "message.h"
-
-#include "player.h"
+#include "mainwindow.h"
 #include "loewct.h"
+#include "message.h"
+#include "player.h"
+#include "pony.h"
+#include "utils.h"
 #include "serialize.h"
-//#include "mob.h"
-//#include "mobsparser.h"
-//#include "mobstats.h"
-//#include "animation.h"
-#include "settings.h"
+//#include "packetloss.h"
 
-// File-Global game-entering mutex (to prevent multiple instantiates/clones)
-static QMutex levelLoadMutex;
-
-void sendPonies(Player *player)
+void sendMessage(Player *player, quint8 messageType, QByteArray data)
 {
-    // The full request is like a normal sendPonies but with all the serialized ponies at the end
-    QList<Pony> ponies = Player::loadPonies(player);
-    quint32 poniesDataSize = 0;
+    QByteArray msg(3,0);
 
-    for (int i=0; i<ponies.size(); i++) poniesDataSize += ponies[i].ponyData.size();
+    // Message Type
+    msg[0] = messageType;
 
-    QByteArray data(5, 0);
-    data[0] = 1; // Request Number from client
-
-    // Number of Ponies
-    data[1] = (quint8)(ponies.size()&0xFF);
-    data[2] = (quint8)((ponies.size()>>8)&0xFF);
-    data[3] = (quint8)((ponies.size()>>16)&0xFF);
-    data[4] = (quint8)((ponies.size()>>24)&0xFF);
-
-    for (int i=0; i<ponies.size(); i++) data += ponies[i].ponyData;
-
-    win.logMessage(LOG_INFO+QObject::tr("UDP: Sending characters data to %1").arg(+player->pony.netviewId));
-
-    sendMessage(player, MsgUserReliableOrdered4, data);
-}
-
-void sendEntitiesList(Player *player)
-{
-    levelLoadMutex.lock(); // Protect player->inGame
-
-    // Not yet in-game, send player's ponies list (Character Selection screen (scene))
-    if (player->inGame == 0)
+    // Sequence Default
+    msg[1] = 0;
+    msg[2] = 0;
+    if (messageType == MsgPing)
     {
-        levelLoadMutex.unlock();
+        msg.resize(6);
 
-        win.logMessage(LOG_INFO+QObject::tr("UDP: Sending ponies list to %1").arg(player->name));
+        // Sequence override
+        msg[1] = 0;
+        msg[2] = 0;
 
-        sendPonies(player);
+        // Payload Size
+        msg[3] = 8;
+        msg[4] = 0;
+
+        // Ping Number
+        player->lastPingNumber++;
+        msg[5] = (quint8)player->lastPingNumber;
+    }
+    else if (messageType == MsgPong)
+    {
+        msg.resize(6);
+
+        // Payload Size
+        msg[3] = 8 * 5;
+        msg[4] = 0;
+
+        // Ping Number
+        msg[5] = (quint8)player->lastPingNumber;
+
+        // Timestamp
+        msg += floatToData(timestampNow());
+    }
+    else if (messageType = MsgUserUnreliable)
+    {
+        msg.resize(5);
+
+        // Sequence override
+        msg[1] = (quint8)(player->udpSequenceNumbers[32] &0xFF);
+        msg[2] = (quint8)((player->udpSequenceNumbers[32] >> 8) & 0xFF);
+
+        // Data Size
+        msg[3] = (quint8)((8*(data.size())) &0xFF);
+        msg[4] = (quint8)(((8*(data.size())) >> 8) & 0xFF);
+
+        // Data
+        msg += data;
+        player->udpSequenceNumbers[32]++;
+
+        //win.logMsg("Sending sync data: "+msg.toHex());
+    }
+    else if (messageType >= MsgUserReliableOrdered1 && messageType <= MsgUserReliableOrdered32)
+    {
+        //win.logMsg(LOG_INFO+" UDP: sendMessage() locking");
+        player->udpSendReliableMutex.lock();
+        player->udpSendReliableGroupTimer->stop();
+        msg.resize(5);
+
+        // Sequence Override
+        msg[1] = (quint8)(player->udpSequenceNumbers[messageType - MsgUserReliableOrdered1] &0xFF);
+        msg[2] = (quint8)((player->udpSequenceNumbers[messageType - MsgUserReliableOrdered1] >> 8) &0xFF);
+
+        // Payload Size
+        msg[3] = (quint8)((8*(data.size())) &0xFF);
+        msg[4] = (quint8)(((8*(data.size())) >> 8) &0xFF);
+
+        // strlen (String lenght)
+        msg += data;
+        player->udpSequenceNumbers[messageType - MsgUserReliableOrdered1] += 2;
+
+        // Flush the buffer before starting a new grouped message
+        if (player->udpSendReliableGroupBuffer.size() + msg.size() > 1024) player->udpDelayedSend();
+
+        player->udpSendReliableGroupBuffer.append(msg);
+
+        // When this timeouts, the content of the buffer will be send reliably
+        player->udpSendReliableGroupTimer->start();
+
+        //win.logMsg(LOG_INFO+" UDP: sendMessage() unlocking");
+        player->udpSendReliableMutex.unlock();
+        return; // This isn't a normal send, but a delayed one with the timer callbacks
+    }
+    else if (messageType == MsgAcknowledge)
+    {
+        msg.resize(5);
+
+        // Payload Size
+        msg[3] = (quint8)((data.size()*8) &0xFF);
+        msg[4] = (quint8)(((data.size()*8) >> 8) &0xFF);
+
+        // Format of packet data n*(Ack type, Ack seq, Ack seq)
+        msg.append(data);
+    }
+    else if (messageType == MsgConnectResponse)
+    {
+        //win.logMsg(LOG_INFO+" UDP: sendMessage() locking");
+        player->udpSendReliableMutex.lock();
+        player->udpSendReliableGroupTimer->stop();
+        msg.resize(5);
+
+        // Payload Size
+        msg[3] = 0x88;
+        msg[4] = 0x00;
+
+        //win.logMsg(LOG_INFO+" UDP: Header data: "+msg.toHex());
+
+        // AppId + UniqueId
+        msg += data;
+        msg += floatToData(timestampNow());
+
+        // Flush the buffer before starting a new grouped message
+        if (player->udpSendReliableGroupBuffer.size() + msg.size() > 1024) player->udpDelayedSend();
+
+        player->udpSendReliableGroupBuffer.append(msg);
+
+        // When this timeouts, the content of the buffer will be send reliably
+        player->udpSendReliableGroupTimer->start();
+
+        //win.logMsg(LOG_INFO+" UDP: sendMessage() unlocking");
+        player->udpSendReliableMutex.unlock();
+        return; // This isn't a normal send, but a delayed one with the timer callbacks
+    }
+    else if (messageType == MsgDisconnect)
+    {
+        msg.resize(6);
+
+        // Payload Size
+        msg[3] = (quint8)(((data.size()+1)*8) &0xFF);
+        msg[4] = (quint8)((((data.size()+1)*8) >> 8) &0xFF);
+
+        // Message Lenght
+        msg[5] = (quint8)data.size();
+
+        // Disconnect message
+        msg += data;
+    }
+    else
+    {
+        win.logStatusMsg("ERROR: sendMessage(): Unknown Message type");
+        win.logMsg("[SEVERE] sendMessage(): Unknown Message type.");
         return;
     }
-    else if (player->inGame > 1) // not supposed to happen, let's do it anyway
-    {
-        //levelLoadMutex.unlock();
-        win.logMessage(LOG_INFO+QObject::tr("UDP: Entities list already sent to %1, Resending Anyway").arg(player->pony.netviewId));
-        //return;
-    }
-    else // Loading Finished, sending entities list
-    {
-        win.logMessage(LOG_INFO+QObject::tr("UDP: Sending entities list to %1").arg(player->pony.netviewId));
-    }
 
-    // Spawn all players on the client
-    Scene* scene = findScene(player->pony.sceneName);
-    for (int i=0; i<scene->players.size(); i++) sendNetviewInstantiate(&scene->players[i]->pony, player);
-
-    // Send npcs
-    for (int i=0; i<loe.npcs.size(); i++)
+    // Simulate packet loss if enabled (DEBUG ONLY!)
+#if UDP_SIMULATE_PACKETLOSS
+    if (qrand() % 100 <= UDP_SEND_PERCENT_DROPPED)
     {
-        if (loe.npcs[i]->sceneName.toLower() == player->pony.sceneName.toLower())
+        if (UDP_LOG_PACKETLOSS)
+            win.logMessage("UDP: Packet dropped !");
+        return;
+    }
+    else if (UDP_LOG_PACKETLOSS)
+        win.logMessage("UDP: Packet got throught");
+#endif
+
+    if (loe.udpSocket->writeDatagram(msg, QHostAddress(player->IP), player->port) != msg.size())
+    {
+        win.logMsg(QObject::tr("%1 UDP: Error sending message to %2: %3").arg(LOG_SEVERE).arg(QString().setNum(player->pony.netviewId)).arg(loe.udpSocket->errorString()));
+        win.logMsg(QObject::tr("%1 Restarting UDP server...").arg(LOG_INFO));
+        win.logStatusMsg("Restarting UDP Game Server...");
+        loe.udpSocket->close();
+        if (!loe.udpSocket->bind(Settings::gamePort, QUdpSocket::ReuseAddressHint | QUdpSocket::ShareAddress))
         {
-            win.logMessage(LOG_INFO+QObject::tr("UDP: Sending NPC %1").arg(loe.npcs[i]->name));
-            sendNetviewInstantiate(loe.npcs[i], player);
+            win.logStatusMsg("Unable to start Game Server on port "+QString().setNum(Settings::gamePort));
+            win.logMsg(QObject::tr("%1 UDP: Unable to start UDP Game server on port %2").arg(LOG_SEVERE).arg(Settings::gamePort));
+            loe.stopGameServer();
+            return;
         }
-    }
-    // Send Mobs
-    for (int i=0; loe.mobs.size(); i++)
-    {
-        if (loe.mobs[i]->sceneName.toLower() == player->pony.sceneName.toLower())
-        {
-            win.logMessage(LOG_INFO+QObject::tr("UDP: Sending mobs %1").arg(loe.mobs[i]->modelName));
-        }
-    }
-
-    // REMINDER: Remove this once mobzones are fully functional
-    // Spawn some mobs in Zecoras
-     //if (scene->name.toLower() == "zecoras")
-       //{
-         //sendNetviewInstantiate(player, "mobs/dragon", win.getNewId(),win.getNewNetviewId(), {-33.0408, 0.000425577, 101.766}, {0, -1,0,1});
-      // }
-
-    player->inGame = 2;
-    levelLoadMutex.unlock();
-
-    // Send stats of the client's pony
-    sendSetMaxStatRPC(player, 0, 100);
-    sendSetStatRPC(player, 0, 100);
-    sendSetMaxStatRPC(player, 1, 100);
-    sendSetStatRPC(player, 1, 100);
-}
-
-void sendPonySave(Player *player, QByteArray msg)
-{
-    if (player->inGame < 2) // Not Supposed to happen, ignoring the request
-    {
-         win.logMessage(LOG_INFO+QObject::tr("UDP: Savegame requested too soon by %1").arg(player->pony.netviewId));
-         return;
-    }
-
-    quint16 netviewId = (quint8)msg[6] += ((quint16)(quint8)msg[7]<<8);
-    Player* refresh = Player::findPlayer(loe.udpPlayers, netviewId); // Find players
-
-    // If we find a matching NPC, send him ate exits (well it was misspelled in the original code, so I think its that)
-    Pony* npc = NULL;
-    for (int i=0; i<loe.npcs.size(); i++)
-        if (loe.npcs[i]->netviewId == netviewId)
-            npc = loe.npcs[i];
-
-    if (npc != NULL)
-    {
-        win.logMessage(LOG_INFO+QObject::tr("UDP: Sending ponyData and worn items for NPC"));
     }
 }

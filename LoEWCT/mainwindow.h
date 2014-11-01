@@ -2,55 +2,52 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtCore>
-#include <QUdpSocket>
-#include <QTcpSocket>
-#include <QTcpServer>
-#include <QByteArray>
-#include <QTimer>
-#include <QList>
-#include <QFile>
-#include <QDir>
-#include <QSettings>
-#include <QtConcurrent/QtConcurrentMap>
-#include <QCryptographicHash>
-#include <QMutex>
-#include <QMap>
-#include <cstdint>
 
-// File includes of includities (is that even a word?)
+#include "serverSettingsWidget.h"
+#include "playercontrols.h"
+#include "loemoviemakertools.h"
+#include "loewctSettingsWidget.h"
 
-#include "loewct.h"
-
-namespace Ui { class MainWindow; }
+namespace Ui {
+    class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
-  Q_OBJECT
-
-    // Main functions
-
-public slots:
-    void sendCmdLine();
-    void externCmdLine(QString str);
+    Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void logMessage(QString msg);
-    void logStatus(QString msg);
-    void chatBoxHandler();
-    void startServer(); // Only calls LoEWCT's class to set it to true
-    void stopServer(); // Only calls LoEWCT's class to set it to true
-
-public:
     Ui::MainWindow *ui;
 
+    void logMsg(QString msg);
+    void logStatusMsg(QString msg);
+    void command(QString cmd);
+    void logGlobalChat(QString msg);
+
+    // Used to call loewct class
+    void stopLogInServer(bool log);
+    void stopGameServer(bool log);
+
+    void startup(); // Starts the application without affecting server.
+
+public slots:
+    void shutdown(); // Shutsdown the application, affecting server to stop.
+
+private slots:
+    void on_btnClearConsoleLog_clicked();
+
+    void on_actionServer_Settings_triggered();
+
+    void on_btnPlayerControls_clicked();
+
+    void on_btnMovieMakerTools_clicked();
+
+    void on_actionSettings_triggered();
 };
 
-// Global extern import from main.cpp
 extern MainWindow win;
-extern LoEWCT loe;
 
 #endif // MAINWINDOW_H

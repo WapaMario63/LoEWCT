@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/server_go.png</file>
+        <file>icons/server_delete.png</file>
+        <file>icons/arrow_refresh.png</file>
+        <file>icons/drive_disk.png</file>
+        <file>icons/server_edit.png</file>
+        <file>icons/application_edit.png</file>
+        <file>icons/controller.png</file>
+        <file>icons/user.png</file>
+        <file>icons/page_white_paste.png</file>
+        <file>icons/bin_empty.png</file>
+        <file>icons/user_edit.png</file>
+        <file>icons/film.png</file>
+    </qresource>
+</RCC>

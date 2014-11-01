@@ -1,0 +1,9 @@
+Classes and stuff from the in development Puerto Castle Game Engine.
+
+This is mostly just testing around some of the Engine's capatibilities in [LoEWCT] in the following areas:
+	- Playback
+	- File Managing
+	- Performance
+	- And more
+	
+There might be a lot of useless things, but I just want to use [LoEWCT] as my little starting point on the engine.

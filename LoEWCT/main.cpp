@@ -1,17 +1,24 @@
-#include "mainwindow.h"
 #include <QApplication>
-
 #include <QTranslator>
 #include <QDir>
 
-#include "LuaSrc/lua.hpp"
 #include "loewct.h"
+#include "mainwindow.h"
+#include "serverSettingsWidget.h"
+#include "playercontrols.h"
+#include "loemoviemakertools.h"
+#include "loewctSettingsWidget.h"
 
 int argc=0;
 
 QApplication a(argc, (char**)0);
-MainWindow win;
+
 LoEWCT loe;
+MainWindow win;
+serverSettings servStgWin;
+playerControls plyrCtrls;
+loeMovieMakerTools lmm;
+loewctSettings loewctStgWin;
 
 int main(int, char**)
 {
@@ -19,24 +26,22 @@ int main(int, char**)
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
     a.addLibraryPath("platforms");
 
-    // Add Capatability for language translations
+    // Adds ability to use translations
     QString locale = QLocale::system().name().section('_', 0, 0);
 
     QTranslator translator;
-    if(!translator.load("languages/"+locale))
+    if (!translator.load("languages/"+locale))
     {
-        qDebug() << "Unable to load language translation";
+        win.logMsg("[QDebug] Unable to load language translation.");
     }
-
+    else
+    {
+        win.logMsg("[QDebug] Langauge Translation Loaded.");
+    }
     a.installTranslator(&translator);
 
-    // Start windows and Processes
     win.show();
     a.processEvents();
 
-    // Start the server
-
-
-    // Window's dtor will quick_exit (we don't run the atexits)
     return a.exec();
 }

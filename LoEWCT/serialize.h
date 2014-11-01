@@ -1,14 +1,9 @@
 #ifndef SERIALIZE_H
 #define SERIALIZE_H
 
-// This file provides type conversions, still needs some more though
-
-// intToString(int arg) and vice-versa, anyone?
-
 #include <cstdint>
 #include <QByteArray>
 #include <QString>
-
 #include "dataType.h"
 
 QByteArray doubleToData(double num);

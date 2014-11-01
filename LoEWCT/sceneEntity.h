@@ -5,19 +5,18 @@
 
 #include "datatype.h"
 
-// Checks for Entities in a scene.
-
 struct SceneEntity
 {
 public:
     SceneEntity();
 
 public:
-    // Get Entity Info
+    // Infos
     QString modelName;
     quint16 id;
     quint16 netviewId;
-    // Get Entity Position, Rotation and Scene
+
+    // Pos
     QString sceneName;
     UVector pos;
     UQuaternion rot;

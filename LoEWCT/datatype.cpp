@@ -1,4 +1,4 @@
-#include "datatype.h"
+#include "dataType.h"
 
 UVector::UVector()
 {
@@ -10,7 +10,7 @@ UVector::UVector()
 UVector::UVector(float ux, float uy, float uz)
 {
     x=ux;
-    y=ux;
+    y=uy;
     z=uz;
 }
 
@@ -25,15 +25,38 @@ UQuaternion::UQuaternion()
 UQuaternion::UQuaternion(float ux, float uy, float uz, float uw)
 {
     x=ux;
-    x=uy;
-    x=uz;
+    y=uy;
+    z=uz;
     w=uw;
 }
 
-WearableItem::WearableItem() : index(0), id(0) {}
-WearableItem::WearableItem(quint8 Index, quint32 Id) : index(Index), id(Id) {}
-bool WearableItem::operator ==(const WearableItem& other) { return id == other.id; }
+WearableItem::WearableItem()
+    : index(0), id(0)
+{
+}
 
-InventoryItem::InventoryItem() : WearableItem() { amount = 1; }
-InventoryItem::InventoryItem(quint8 Index, quint32 Id) : WearableItem(Index, Id), amount(1) {}
-InventoryItem::InventoryItem(quint8 Index, quint32 Id, quint32 Amount) : WearableItem(Index, Id), amount(Amount) {}
+WearableItem::WearableItem(quint8 Index, quint32 Id)
+    : index(Index), id(Id)
+{
+}
+
+bool WearableItem::operator==(const WearableItem& other)
+{
+    return id == other.id;
+}
+
+InventoryItem::InventoryItem() : WearableItem()
+{
+    amount=1;
+}
+
+InventoryItem::InventoryItem(quint8 Index, quint32 Id)
+    : WearableItem(Index, Id), amount(1)
+{
+
+}
+
+InventoryItem::InventoryItem(quint8 Index, quint32 Id, quint32 Amount)
+    : WearableItem(Index,Id), amount(Amount)
+{
+}

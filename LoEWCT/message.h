@@ -1,28 +1,18 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#include <QString>
+#include <QPair>
 #include <QMutex>
 #include <QByteArray>
 #include <QStringList>
+#include "dataType.h"
 
-#include "datatype.h"
-
-// This file is like the most complicated one.
-// Ehem, this file acesses a lot of the game's functions so the server can use them.
-
-// Hacky at best indeed.
-
-// This one... something related to player's stats/state
-enum NetviewRemoveReasonCodes
-{
+enum NetviewRemoveReasonCodes {
     NetviewRemoveReasonDefault = 0,
     NetviewRemoveReasonKill = 1
 };
 
-// All of the game's message types.
-enum MessageTypes
-{
+enum MessageTypes {
     MsgUnconnected = 0,
     MsgUserUnreliable = 1,
     MsgPing = 0x81,
@@ -32,7 +22,6 @@ enum MessageTypes
     MsgConnectionEstablished = 0x85,
     MsgAcknowledge = 0x86,
     MsgDisconnect = 0x87,
-
     MsgUserReliableOrdered1 = 0x43,
     MsgUserReliableOrdered2 = 0x44,
     MsgUserReliableOrdered3 = 0x45,
@@ -46,41 +35,34 @@ enum MessageTypes
     MsgUserReliableOrdered32 = 0x62
 };
 
-// Chat Types, you know, those tabs like Global, Local, etc.
 enum ChatType
 {
     ChatNone = 0,
     ChatUntyped = 1,
-    ChatSystem = 2, // It's the [Announcement] from the official servers, but no [Announcement] on it, only that pen
-    ChatGeneral = 4, // Global Chat
-    ChatLocal = 8, // Says it all
-    ChatParty = 16, // Says it all
-    ChatGuild = 32, // Herd Chat
-    ChatWhisper = 64 // Says it all
+    ChatSystem = 2,
+    ChatGeneral = 4,
+    ChatLocal = 8,
+    ChatParty = 16,
+    ChatGuild = 32,
+    ChatWhisper = 64
 };
+
+// Public functions
 
 class Player;
 class Pony;
 //class Mob;
 //class Animation;
-
-// All the message functions.
-
-/// Only in receiveMessage.cpp
 void receiveMessage(Player* player);
-
-/// Only in sendMessage.cpp
 void sendMessage(Player* player, quint8 messageType, QByteArray data=QByteArray());
-
-// Only in message.cpp
 void sendEntitiesList(Player* player);
-void sendPonySave(Player* player);
+void sendPonySave(Player* player, QByteArray msg);
 void sendPonies(Player* player);
 void sendPonyData(Player* player);
-void sendPonyData(Pony *src, Player* data);
-void sendNetviewInstantiate(Player* player, QString key, quint16 NetviewId, quint16 viewId, UVector pos, UQuaternion rot);
+void sendPonyData(Pony *src, Player* dst);
+void sendNetviewInstantiate(Player* player, QString key, quint16 NetviewId, quint16 ViewId, UVector pos, UQuaternion rot);
 void sendNetviewInstantiate(Player* player);
-void sendNetviewInstantiate(Player* player, Mob* mob);
+//void sendNetviewInstantiate(Player* player, Mob* mob);
 void sendNetviewInstantiate(Pony *src, Player* dst);
 void sendNetviewRemove(Player* player, quint16 netviewId);
 void sendNetviewRemove(Player* player, quint16 netviewId, quint8 reasonCode);
@@ -115,6 +97,8 @@ void sendDeleteItemRPC(Player* player, uint8_t index, uint32_t qty);
 void sendBeginShop(Player* player, Pony* npcShop);
 void sendEndShop(Player* player);
 void sendAddViewAddShop(Player* player, Pony* npcShop);
-void sendAnimation(Player* player, const Animation* animation);
+//void sendAnimation(Player* player, const Animation* animation);
+void sendAnnouncementMessage(Player* player, QString message, float time);
+void sendMessageBox(Player* player, QString msg);
 
 #endif // MESSAGE_H

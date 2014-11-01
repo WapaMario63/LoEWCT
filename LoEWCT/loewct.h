@@ -6,6 +6,7 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QByteArray>
+#include <QDateTime>
 #include <QTimer>
 #include <QList>
 #include <QFile>
@@ -16,73 +17,92 @@
 #include <QMutex>
 #include <QMap>
 #include <cstdint>
+#include <memory>
 
-#include "mainwindow.h"
+#include "settings.h"
 #include "player.h"
-#include "maps.h"
-#include "mob.h"
-#include "mobparser.h"
+#include "pony.h"
+#include "scene.h"
 
-// Define paths and files that are used frequently
 #define GAMEDATAPATH "data/data/"
 #define PLAYERSPATH "data/players/"
-#define NETDATAPATH "data/netdata/"
-#define CONFIGPATH "data/server.ini"
-#define SERVERLISTPATH "data/serversList.cfg"
-#define MOBZONESPATH "data/mobZones/"
+#define NETDATAPATH "data/netData/"
+#define CONFIGFILEPATH "data/server.ini"
+#define SERVERSLISTFILEPATH "data/serversList.cfg"
+#define LOEWCTCONFIGFILEPATH "data/LoEWCT_config.ini"
+#define MOBSPATH "data/mobZones/"
 
-// THE CORE OF [LoEWCT] \\
-
-class Mobzone;
-class Mob;
-
-class LoEWCT : public QMainWindow
+class LoEWCT : public QObject
 {
+    Q_OBJECT
 public slots:
     void checkPingTimeouts();
 
 public:
-    void stopServer(bool log);
+    LoEWCT();
+    ~LoEWCT();
+
+    // Servers
+    void startLoginServer();
+    void stopLoginServer(); // Only called by mainwindow if the bool version is true
+    void startGameServer();
+    void stopGameServer(); // Only called by mainwindow if the bool version is true
+
+    void loadConfig();
+    void saveConfig();
+
     int getNewNetviewId();
     int getNewId();
 
+    // TCP stuff
 public slots:
-    // UDP Socket related things
-    void udpProcessPendingDatagrams();
-    // TCP Server And Socket related things
     void tcpConnectClient();
     void tcpDisconnectClient();
-    void tcpProcessPendingDatagrams();
+    void tcpProcessPendingDatagram();
+
 public:
     void tcpProcessData(QByteArray data, QTcpSocket *socket);
 
-// General things of generalism
-public:
-    QUdpSocket *udpSocket;
-    float startTimestamp;
-
-    QList<Player*> tcpPlayers; // Used by the TCP Login server
-    QList<Player*> udpPlayers; // Used by the UDP Game server
-    QList<Pony*> npcs; // List of npcs from the npcs DB
-    //QList<Quest> quests; // List of quests from the npcs DB
-
-    QMap<uint32_t, uint32_t> wearablePositionsMap; // Maps Item IDs to their wearable positions.
-
-    QList<Scene> scenes; // List of scenes from the vortex DB
+    float startTimeStamp;
     QMutex lastIdMutex; // Protects lastId and lastNetviewId
+    int syncInterval;
 
-    QList<Mobzone*> mobzones;
-    QList<Mob*> mobs;
+    QList<Player*> tcpPlayers; // Used by the TCP login server
+    QList<Player*> udpPlayers; // Used by the UDP game server
+    QList<Pony*> npcs; // List of npcs from the npcs DB
+    QList<Scene> scenes; // List of scenes from the vortex DB
+    //QList<Quest> quests; // List of quests from the npcs DB
+    QMap<uint32_t, uint32_t> wearablePositionsMap; // Maps item IDs to their wearable positions.
+
+public:
+    QTcpServer* tcpServer;
+    QUdpSocket *udpSocket;
+    QList<QPair<QTcpSocket*, QByteArray*>> tcpClientsList;
+    QTcpSocket remoteLoginSock;
+    QByteArray* tcpReceivedDatas;
+    Player* cmdPlayer;
+    //std::unique_ptr<Sync> sync;
 
 private:
-    QTcpServer* tcpServer;
-    QList<QPair<QTcpSocket*, QByteArray*>> tcpClientsList;
-    QTcpSocket remoteLoginSock; // Socket to the remote login server, if we use one
-    QByteArray* tcpReceivedDatas;
 
     QTimer* pingTimer;
-    //Sync sync
-    bool* usedIds;
+    //Sync sync;
+    bool* usedids;
+};
+
+class LoEWCTThread : public QObject
+{
+        Q_OBJECT
+public:
+    void run();
+
+    void runGameServerThread();
+    void runLoginServerThread();
+
+    bool useGameServer;
+    bool useLoginServer;
+
+    QString threadName;
 };
 
 extern LoEWCT loe;

@@ -1,53 +1,82 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2014-08-03T18:05:21
+# Project created by QtCreator 2014-09-09T16:49:32
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui widgets network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = LoEWCT
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         mainwindow.cpp \
-    loewct.cpp \
-    player.cpp \
+    settings.cpp \
+    tcp.cpp \
+    udp.cpp \
+    serverSettingsWidget.cpp \
+    playercontrols.cpp \
+    loemoviemakertools.cpp \
+    loewctSettingsWidget.cpp \
     datatype.cpp \
     serialize.cpp \
-    maps.cpp \
-    quest.cpp \
+    utils.cpp \
+    loewct.cpp \
+    sync.cpp \
+    player.cpp \
+    pony.cpp \
+    scene.cpp \
+    sendClientMessages.cpp \
+    receiveClientMessages.cpp \
     message.cpp \
-    settings.cpp \
-    mob.cpp \
-    mobparser.cpp \
-    pony.cpp
+    pingTimeout.cpp \
+    receiveClientAck.cpp \
+    $$files(/pce/QuaZip/*.cpp) \
+    $$files(/pce/QuaZip/*.c) \
+    chat.cpp \
+    database.cpp
 
 HEADERS  += mainwindow.h \
-    loewct.h \
-    player.h \
+    settings.h \
+    udp.h \
+    serverSettingsWidget.h \
+    playercontrols.h \
+    loemoviemakertools.h \
+    loewctSettingsWidget.h \
     datatype.h \
     serialize.h \
-    statsComponent.h \
-    sceneEntity.h \
-    maps.h \
-    quest.h \
     message.h \
-    settings.h \
-    mob.h \
-    mobzone.h \
-    mobparser.h \
-    pony.h
+    utils.h \
+    loewct.h \
+    sync.h \
+    player.h \
+    pony.h \
+    sceneEntity.h \
+    statsComponent.h \
+    sendmessage.h \
+    scene.h \
+    receiveClientAck.h \
+    $$files(/pce/QuaZip/*.h) \
+    chat.h \
+    database.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    serverSettingsWidget.ui \
+    playercontrols.ui \
+    loemoviemakertools.ui \
+    loewctSettingsWidget.ui
 
-# include coreservices (required for timestamps) for mac
-macx {
-    QMAKE_LFLAGS += -F /System/Library/Frameworks/CoreServices.framework/
-    LIBS += -framework CoreServices
-}
+# Configuration to use C++11 (always make the C lowercase so it works on Mac and Linux, Windows doesn't care)
+CONFIG += c++11
 
-CONFIG += C++11
+RESOURCES += \
+    res.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/pce/libs/ -lzdll
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/pce/libs/ -lzdlld
+else:unix: LIBS += -L$$PWD/pce/libs/ -lzdll
+
+INCLUDEPATH += $$PWD/pce/libs
+DEPENDPATH += $$PWD/pce/libs
