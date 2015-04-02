@@ -8,7 +8,7 @@ class Threads : public QObject
     Q_OBJECT
 public:
     void runLoginServThread();
-    void runGameServ();
+    void runGameServThread();
 
     bool stopLoginServThread;
     bool stopGameServThread;
