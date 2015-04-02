@@ -2,11 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QThread>
 
 #include "serverSettingsWidget.h"
 #include "playercontrols.h"
 #include "loemoviemakertools.h"
 #include "loewctSettingsWidget.h"
+
+class Threads;
 
 namespace Ui {
     class MainWindow;
@@ -22,12 +25,25 @@ public:
 
     Ui::MainWindow *ui;
 
-    void logMsg(QString msg);
-    void logStatusMsg(QString msg);
+    // Threads
+    QThread loeLoginThread;
+    QThread loeGameThread;
+    Threads *loeThread;
+    void startLoginThread();
+    void startGameThread();
+    void stopLoginThread();
+    void stopGameThread();
+    QString logMsgFromThread;
+public slots:
+    void onLoggedConsole(QString);
+public:
+
     void command(QString cmd);
     void logGlobalChat(QString msg);
 
     // Used to call loewct class
+    void startLoginServer(bool log);
+    void startGameServer(bool log);
     void stopLogInServer(bool log);
     void stopGameServer(bool log);
 
@@ -35,6 +51,9 @@ public:
 
 public slots:
     void shutdown(); // Shutsdown the application, affecting server to stop.
+
+    void logMsg(QString msg);
+    void logStatusMsg(QString msg);
 
 private slots:
     void on_btnClearConsoleLog_clicked();
@@ -46,6 +65,7 @@ private slots:
     void on_btnMovieMakerTools_clicked();
 
     void on_actionSettings_triggered();
+    void on_btnLoginServer_clicked();
 };
 
 extern MainWindow win;

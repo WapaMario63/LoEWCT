@@ -18,11 +18,14 @@
 #include <QMap>
 #include <cstdint>
 #include <memory>
+#include <iostream>
 
 #include "settings.h"
 #include "player.h"
 #include "pony.h"
 #include "scene.h"
+#include "mainwindow.h"
+#include "threads.h"
 
 #define GAMEDATAPATH "data/data/"
 #define PLAYERSPATH "data/players/"
@@ -90,21 +93,10 @@ private:
     bool* usedids;
 };
 
-class LoEWCTThread : public QObject
-{
-        Q_OBJECT
-public:
-    void run();
-
-    void runGameServerThread();
-    void runLoginServerThread();
-
-    bool useGameServer;
-    bool useLoginServer;
-
-    QString threadName;
-};
-
 extern LoEWCT loe;
+extern Threads loeThread;
+
+extern QTextStream cout;
+extern QTextStream cin;
 
 #endif // LOEWCT_H

@@ -704,7 +704,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QPushButton" name="btnStartServer">
+       <widget class="QPushButton" name="btnLoginServer">
         <property name="text">
          <string>Start Log In Server</string>
         </property>
@@ -715,7 +715,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnStopServer">
+       <widget class="QPushButton" name="btnGameServer">
         <property name="text">
          <string>Start Game Server</string>
         </property>
@@ -726,7 +726,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnRestartServer">
+       <widget class="QPushButton" name="btnRestartServers">
         <property name="text">
          <string>Restart Game Server</string>
         </property>

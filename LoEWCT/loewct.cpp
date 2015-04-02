@@ -18,23 +18,6 @@ LoEWCT::~LoEWCT()
     Settings::logInfos = false;
 }
 
-// Threading, Game Server gets its own thread, Log In Server gets another, and the UI itself gets another.
-// >inb4
-//  >manual memory management
-//  Kill yourself.
-void LoEWCTThread::run()
-{
-    if (useGameServer && Settings::enableGameServer)
-    {
-
-    }
-
-    if (useLoginServer && Settings::enableLoginServer)
-    {
-
-    }
-}
-
 void LoEWCT::startGameServer()
 {
 

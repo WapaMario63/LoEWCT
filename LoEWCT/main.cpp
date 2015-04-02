@@ -20,6 +20,9 @@ playerControls plyrCtrls;
 loeMovieMakerTools lmm;
 loewctSettings loewctStgWin;
 
+QTextStream cout(stdout);
+QTextStream cin(stdin);
+
 int main(int, char**)
 {
     // Windows DLL hell fix

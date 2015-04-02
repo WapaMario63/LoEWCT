@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     $$files(/pce/QuaZip/*.cpp) \
     $$files(/pce/QuaZip/*.c) \
     chat.cpp \
-    database.cpp
+    database.cpp \
+    threads.cpp
 
 HEADERS  += mainwindow.h \
     settings.h \
@@ -60,7 +61,8 @@ HEADERS  += mainwindow.h \
     receiveClientAck.h \
     $$files(/pce/QuaZip/*.h) \
     chat.h \
-    database.h
+    database.h \
+    threads.h
 
 FORMS    += mainwindow.ui \
     serverSettingsWidget.ui \
