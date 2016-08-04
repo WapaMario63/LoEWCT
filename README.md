@@ -1,6 +1,6 @@
 ## Legends of Equestria, Wapa Castle Team Edition
 
-_This LoEWCT remake repo, LoE Movie Maker and other [LoEWCT] servers are now discountinued. LoEWCT2 may be started soon and once that has an actual working server, this repo may be deleted._
+_This LoEWCT remake repo, LoE Movie Maker and other [LoEWCT] servers are now discountinued. Please check out [LoEWCT2](https://github.com/WapaMario63/LoEWCT2) instead and once that has an actual working server, this repo may be deleted._
 
 For downloads on the original [LoEWCT] and LoE Movie Maker, along with their source code, visit here:
 
