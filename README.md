@@ -2,15 +2,11 @@
 
 _This LoEWCT remake repo, LoE Movie Maker and other [LoEWCT] servers are now discountinued. Please check out [LoEWCT2](https://github.com/WapaMario63/LoEWCT2) instead and once that has an actual working server, this repo may be deleted._
 
-For downloads on the original [LoEWCT] and LoE Movie Maker, along with their source code, visit here:
-
-[LoEWCT Downloads](http://loewct.ml/downloads.php)
-
 ### Original info
 
 [LoEWCT] is a WCT's approach at improving tux3's [LoE Private Server](http://github.com/tux3/LoE-PrivateServer) with stuff like a user friendly control panel that lets you access everything, like the chat, server console, tools to moderate players, easy configuration instead of touching .ini files, and more!
 
-First [LoEWCT] thread on PonyForums.net: <http://ponyforums.net/showthread.php?tid=87>
+First [LoEWCT] thread on PonyForums.net: <http://ponyforums.net/showthread.php?tid=87> (Site now dead)
 
 A new thread will be created when the first public release of the [LoEWCT] remake is done.
 
